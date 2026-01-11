@@ -127,13 +127,17 @@ while [ $iteration -lt $MAX_ITERATIONS ]; do
     echo "=== Iteration $iteration - $(date) ===" >> "$LOG_FILE"
     
     # Execute copilot with the prompt
-    output=$(cat "$PROMPT_FILE" | copilot 2>&1) || {
+    # Capture stdout and stderr separately to avoid false positives
+    output=$(cat "$PROMPT_FILE" | copilot 2>&1)
+    exit_code=$?
+    
+    if [ $exit_code -ne 0 ]; then
         echo -e "${RED}Error: copilot command failed${NC}"
         echo "$output"
         echo "ERROR: copilot failed at iteration $iteration" >> "$LOG_FILE"
         echo "$output" >> "$LOG_FILE"
         exit 1
-    }
+    fi
     
     # Display output
     echo "$output"

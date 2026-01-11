@@ -302,6 +302,11 @@ echo -e "  3. ${YELLOW}copilot${NC} - Then read .copilot/instructions/plan-phase
 echo -e "  4. ${YELLOW}./ralph-execute.sh${NC} - Run the execution loop"
 echo ""
 echo -e "${BLUE}Project structure:${NC}"
-tree -L 2 "$PROJECT_NAME" 2>/dev/null || find "$PROJECT_NAME" -maxdepth 2 -print | sed 's|[^/]*/| |g'
+if command -v tree &> /dev/null; then
+    tree -L 2 "$PROJECT_NAME"
+else
+    echo "$PROJECT_NAME/"
+    ls -1 "$PROJECT_NAME" | sed 's/^/  /'
+fi
 echo ""
 echo -e "${GREEN}Happy coding with Ralph! 🤖${NC}"
